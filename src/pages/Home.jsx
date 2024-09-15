@@ -2,16 +2,26 @@ import React from "react";
 import Header from "../components/layout/Header";
 import Nav from "../components/layout/Nav";
 import FeedItem from "../components/FeedItem";
+import { useNavigate } from "react-router-dom";
+import { auth } from "../firebase";
 
 const Home = () => {
   // logic
-  console.log("home!!");
+  const history = useNavigate();
+
+  const handleLogout = async () => {
+    const isLogoutChecked = window.confirm("Are you sure logout?");
+    if (isLogoutChecked) {
+      await auth.signOut();
+      history("/login");
+    }
+  };
 
   // view
   return (
     <div className="h-full pt-20 pb-[74px] overflow-hidden">
       {/* START: 헤더 영역 */}
-      <Header />
+      <Header onLogout={handleLogout} />
       {/* END: 헤더 영역 */}
       <main className="h-full overflow-auto">
         <div>

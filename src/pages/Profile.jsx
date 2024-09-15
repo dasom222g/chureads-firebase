@@ -21,7 +21,7 @@ const Profile = () => {
       <div className="fixed h-20 top-0 right-6 flex items-center">
         <button
           type="button"
-          className="bg-white text-churead-black rounded-lg px-2 py-1"
+          className="bg-white text-churead-black rounded-lg px-3 py-1"
           onClick={handleLogout}
         >
           로그아웃
