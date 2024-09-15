@@ -4,6 +4,10 @@ import Nav from "../components/layout/Nav";
 import FeedItem from "../components/FeedItem";
 
 const Home = () => {
+  // logic
+  console.log("home!!");
+
+  // view
   return (
     <div className="h-full pt-20 pb-[74px] overflow-hidden">
       {/* START: 헤더 영역 */}
