@@ -1,8 +1,25 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import PostInput from "../components/PostInput";
+import { auth } from "../firebase";
 
 const Post = () => {
+  // logic
+  const user = auth.currentUser; // User || null
+
+  const [churead, setChuread] = useState("");
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    if (!user || !churead) return;
+    console.log("churead", churead);
+  };
+
+  const hanldeInputChange = (value) => {
+    setChuread(value);
+  };
+
+  // view
   return (
     <div className="h-full">
       <header className="fixed max-w-[572px] mx-auto px-4 py-6 text-center top-0 left-0 right-0">
@@ -16,9 +33,9 @@ const Post = () => {
       </header>
       <main className="h-full pt-[72px] pb-[88px] overflow-hidden">
         <div className="h-full overflow-auto">
-          <form id="post">
+          <form id="post" onSubmit={handleSubmit}>
             {/* START: 사용자 입력 영역 */}
-            <PostInput />
+            <PostInput onChange={hanldeInputChange} />
             {/* END: 사용자 입력 영역 */}
             {/* START: 게시 버튼 영역 */}
             <div className="w-full max-w-[572px] flex items-center fixed bottom-0 lef p-6">

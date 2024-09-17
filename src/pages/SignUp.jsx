@@ -36,7 +36,15 @@ const SignUp = () => {
 
     // 로딩 중이면 실행 안함
     if (isLoading) return;
-    const { name, email, password } = formData;
+    const {
+      name: nameValue,
+      email: emailValue,
+      password: passwordValue,
+    } = formData;
+
+    const name = nameValue.trim();
+    const email = emailValue.trim();
+    const password = passwordValue.trim();
 
     // name, email, password 중에 하나라도 빈값이면 실행 안함
     if (!name || !email || !password) return;
