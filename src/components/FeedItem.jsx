@@ -1,6 +1,6 @@
 import React from "react";
 
-const FeedItem = ({ item, currentUserId, onEdit, onDelete }) => {
+const FeedItem = ({ item, currentUserId, onEdit, onLike, onDelete }) => {
   // logic
   const { userId, userName, churead, likes } = item;
 
@@ -44,7 +44,11 @@ const FeedItem = ({ item, currentUserId, onEdit, onDelete }) => {
           <p className="pt-1">{churead}</p>
           {/* START: 좋아요 영역 */}
           <div className="flex items-center">
-            <button type="button" className="text-churead-gray-400">
+            <button
+              type="button"
+              className="text-churead-gray-400"
+              onClick={() => onLike(item)}
+            >
               좋아요 아이콘 <span>{likes}</span>
             </button>
           </div>

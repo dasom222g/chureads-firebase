@@ -9,9 +9,11 @@ import {
   deleteDoc,
   doc,
   getDocs,
+  increment,
   onSnapshot,
   orderBy,
   query,
+  updateDoc,
 } from "firebase/firestore";
 
 const Home = () => {
@@ -77,9 +79,16 @@ const Home = () => {
     console.log("🚀 selectedItem:", selectedItem);
   };
 
-  const handleDelete = async (selectedItem) => {
-    console.log("🚀 selectedItem:", selectedItem);
+  const handleLike = async (selectedItem) => {
+    const { id } = selectedItem;
+    const docRef = doc(db, "chureads", id);
+    await updateDoc(docRef, {
+      likes: increment(1), // 1 증가
+      // likes: increment(-1), // 1 증가
+    });
+  };
 
+  const handleDelete = async (selectedItem) => {
     // ok안한 경우 취소
     const ok = window.confirm("정말 삭제하시겠습니까?");
     if (!ok) return;
@@ -126,6 +135,7 @@ const Home = () => {
                 currentUserId={user.uid}
                 key={item.id}
                 onEdit={handleEdit}
+                onLike={handleLike}
                 onDelete={handleDelete}
               />
             ))}
