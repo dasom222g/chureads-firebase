@@ -39,7 +39,11 @@ const Login = () => {
 
     // 로딩 중이면 실행 안함
     if (isLoading) return;
-    const { email, password } = formData;
+    const { email: emailValue, password: passwordValue } = formData;
+
+    // 불필요한 공백 제거 후 체크
+    const email = emailValue.trim();
+    const password = passwordValue.trim();
 
     // email, password 중에 하나라도 빈값이면 실행 안함
     if (!email || !password) return;
