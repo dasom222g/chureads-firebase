@@ -6,8 +6,8 @@ const PostInput = ({ onChange }) => {
 
   const handleChange = (event) => {
     const { value } = event.target;
-    setValue(value.trim());
-    onChange(value.trim());
+    setValue(value);
+    onChange(value);
   };
 
   // view

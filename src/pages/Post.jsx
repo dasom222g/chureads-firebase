@@ -1,18 +1,50 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import PostInput from "../components/PostInput";
-import { auth } from "../firebase";
+import { auth, db } from "../firebase";
+import { addDoc, collection } from "firebase/firestore";
 
 const Post = () => {
   // logic
+  const history = useNavigate("");
   const user = auth.currentUser; // User || null
+
+  const [isLoading, setIsLoading] = useState(""); // 게시중 로딩
 
   const [churead, setChuread] = useState("");
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    if (!user || !churead) return;
-    console.log("churead", churead);
+    const chureadValue = churead.trim();
+    // 1. 로그인 한 경우만 실행
+    // 2. 입력값 있는경우만 실행
+    // 3. 500자 이하인 경우만 실행
+    // 4. 포스팅 로딩중이 아닌 경우만 실행(isLoading추가 후에 작성)
+    if (isLoading || !user || !chureadValue || chureadValue.length > 500)
+      return;
+    console.log("chureadValue", chureadValue);
+
+    setIsLoading(true);
+    try {
+      const collectionRef = collection(db, "chureads");
+      // userId, userName, churead, likes, createAt저장
+      const addData = {
+        userId: user.uid,
+        userName: user.displayName,
+        churead: chureadValue,
+        likes: 0,
+        createAt: Date.now(),
+      };
+      console.log("🚀 ~ handleSubmit ~ addData:", addData);
+      await addDoc(collectionRef, addData);
+      console.log("포스팅 완료");
+      // 포스팅 완료 후 home화면으로 이동
+      history("/");
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const hanldeInputChange = (value) => {
@@ -46,7 +78,7 @@ const Post = () => {
                 type="submit"
                 className="ml-auto px-5 py-2 bg-white text-churead-black rounded-3xl font-bold"
               >
-                게시
+                {isLoading ? "Loading" : "게시"}
               </button>
             </div>
             {/* END: 게시 버튼 영역 */}

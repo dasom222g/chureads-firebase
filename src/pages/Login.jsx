@@ -48,9 +48,8 @@ const Login = () => {
     // email, password 중에 하나라도 빈값이면 실행 안함
     if (!email || !password) return;
 
+    setIsLoading(true);
     try {
-      setIsLoading(true);
-
       // TODO: 1. 계정 로그인
       const result = await signInWithEmailAndPassword(auth, email, password);
       console.log("🚀 ~ handleSumbit ~ result:", result);
@@ -99,7 +98,10 @@ const Login = () => {
             onInputChange={handleInputChange}
           />
           {errorMessage && <Error message={errorMessage} />}
-          <LoginButton category="login" text="Login" />
+          <LoginButton
+            category="login"
+            text={isLoading ? "Loading.." : "Login"}
+          />
         </form>
         {/* END: 폼 영역 */}
         <div className="flex justify-center gap-1 py-6">

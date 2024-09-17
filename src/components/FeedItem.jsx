@@ -1,8 +1,11 @@
 import React from "react";
 
-const FeedItem = ({ item }) => {
+const FeedItem = ({ item, currentUserId, onEdit, onDelete }) => {
   // logic
-  const { userName, churead, likes } = item;
+  const { userId, userName, churead, likes } = item;
+
+  // 현재 로그인한 유저가 글 작성자인지 체크하여 권한 부여
+  const isAuthor = currentUserId === userId;
 
   // view
   return (
@@ -18,14 +21,24 @@ const FeedItem = ({ item }) => {
           <div className="flex items-center">
             <span className="font-bold">{userName}</span>
             {/* START: 수정, 삭제 버튼 영역 */}
-            <div className="ml-auto">
-              <button type="button" className="max-w-6 p-1">
-                <img src="./images/icon-home.svg" alt="" />
-              </button>
-              <button type="button" className="max-w-6 p-1">
-                <img src="./images/icon-home.svg" alt="" />
-              </button>
-            </div>
+            {isAuthor && (
+              <div className="ml-auto">
+                <button
+                  type="button"
+                  className="max-w-6 p-1"
+                  onClick={() => onEdit(item)}
+                >
+                  <img src="./images/icon-home.svg" alt="" />
+                </button>
+                <button
+                  type="button"
+                  className="max-w-6 p-1"
+                  onClick={() => onDelete(item)}
+                >
+                  <img src="./images/icon-home.svg" alt="" />
+                </button>
+              </div>
+            )}
             {/* END: 수정, 삭제 버튼 영역 */}
           </div>
           <p className="pt-1">{churead}</p>
