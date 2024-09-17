@@ -61,7 +61,7 @@ const SignUp = () => {
 
       // TODO: 2. 사용자 이름 세팅하기
       await updateProfile(credential.user, {
-        displayName: credential.user.displayName,
+        displayName: name,
       });
 
       // TODO: 3. Home화면으로 보내기
