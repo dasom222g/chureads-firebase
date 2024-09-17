@@ -4,11 +4,22 @@ import Nav from "../components/layout/Nav";
 import FeedItem from "../components/FeedItem";
 import { useNavigate } from "react-router-dom";
 import { auth, db } from "../firebase";
-import { collection, getDocs, query } from "firebase/firestore";
+import {
+  collection,
+  deleteDoc,
+  doc,
+  getDocs,
+  onSnapshot,
+  orderBy,
+  query,
+} from "firebase/firestore";
 
 const Home = () => {
   // logic
   const history = useNavigate();
+  const user = auth.currentUser;
+
+  let unsubscribe = null;
 
   const [feedList, setFeedList] = useState([]);
 
@@ -20,9 +31,14 @@ const Home = () => {
     }
   };
 
+  // eslint-disable-next-line no-unused-vars
   const getData = async () => {
     // query 객체 정의
-    const chureadQuery = query(collection(db, "chureads"));
+    const collectionRef = collection(db, "chureads");
+    // const chureadQuery = query(collectionRef);
+
+    // 최신데이터를 위로 오게하고 싶다면?
+    const chureadQuery = query(collectionRef, orderBy("createAt", "desc"));
 
     // document데이터 가져오기
     const snapshot = await getDocs(chureadQuery);
@@ -30,11 +46,68 @@ const Home = () => {
       id: item.id, // 자동 생성되는 documentID의미
       ...item.data(),
     }));
+    console.log("🚀 ~ datas:", datas);
     setFeedList(datas);
   };
 
+  const getLiveData = async () => {
+    // query 객체 정의
+    const collectionRef = collection(db, "chureads");
+    // const chureadQuery = query(collectionRef);
+
+    // 최신데이터를 위로 오게하고 싶다면?
+    const chureadQuery = query(collectionRef, orderBy("createAt", "desc"));
+
+    // 실시간 데이터 구독 취소를 위해 변수에 리턴값 저장
+    unsubscribe = onSnapshot(chureadQuery, (snapshot) => {
+      const datas = snapshot.docs.map((item) => ({
+        id: item.id,
+        ...item.data(),
+      }));
+      console.log("🚀 Snapshot ~ datas:", datas);
+      setFeedList(datas);
+    });
+    try {
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handleEdit = (selectedItem) => {
+    console.log("🚀 selectedItem:", selectedItem);
+  };
+
+  const handleDelete = async (selectedItem) => {
+    console.log("🚀 selectedItem:", selectedItem);
+
+    // ok안한 경우 취소
+    const ok = window.confirm("정말 삭제하시겠습니까?");
+    if (!ok) return;
+
+    // 작성 유저가 아니면 취소
+    const { userId, id } = selectedItem;
+
+    if (userId !== user.uid) return;
+    const docRef = doc(db, "chureads", id);
+
+    try {
+      // 문서(아이템)) 삭제
+      await deleteDoc(docRef);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   useEffect(() => {
-    getData();
+    // getData();
+    getLiveData(); // 실시간 데이터로 무한 반복되니까 진입시 한번만 실행시키기
+
+    return () => {
+      // 실시간 데이터 snapshot이벤트/ 구독취소
+      console.log("unsubscribe", unsubscribe);
+      unsubscribe && unsubscribe();
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // view
@@ -48,7 +121,13 @@ const Home = () => {
           {/* START: 피드 영역 */}
           <ul>
             {feedList.map((item) => (
-              <FeedItem item={item} key={item.id} />
+              <FeedItem
+                item={item}
+                currentUserId={user.uid}
+                key={item.id}
+                onEdit={handleEdit}
+                onDelete={handleDelete}
+              />
             ))}
           </ul>
           {/* END: 피드 영역 */}
