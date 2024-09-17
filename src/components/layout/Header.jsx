@@ -3,14 +3,14 @@ import { Link } from "react-router-dom";
 
 const Header = ({ onLogout }) => {
   return (
-    <div className="relative">
-      <h1 className="fixed top-0 left-0 right-0 py-2">
-        <Link to="/">
+    <header className="max-w-[572px] fixed top-0 left-0 right-0 mx-auto">
+      <h1 className="py-2 text-center">
+        <Link to="/" className="w-fit inline-block">
           <img src="./images/logo.svg" className="mx-auto h-16" alt="로고" />
         </Link>
       </h1>
       {/* START: 로그아웃 버튼 */}
-      <div className="fixed h-20 top-0 right-6 flex items-center">
+      <div className="flex items-center absolute right-5 top-1/2 transform -translate-y-1/2">
         <button
           type="button"
           className="bg-white text-churead-black rounded-lg px-2 py-1"
@@ -20,7 +20,7 @@ const Header = ({ onLogout }) => {
         </button>
       </div>
       {/* END: 로그아웃 버튼 */}
-    </div>
+    </header>
   );
 };
 
