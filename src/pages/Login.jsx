@@ -3,7 +3,11 @@ import InputField from "../components/InputField";
 import LoginButton from "../components/LoginButton";
 import { Link, useNavigate } from "react-router-dom";
 import Error from "../components/Error";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import {
+  GoogleAuthProvider,
+  signInWithEmailAndPassword,
+  signInWithPopup,
+} from "firebase/auth";
 import { auth } from "../firebase";
 
 const Login = () => {
@@ -31,7 +35,7 @@ const Login = () => {
   };
 
   // 로그인 제출
-  const handleSumbit = async (event) => {
+  const handleLogin = async (event) => {
     // 제출시 새로고침 방지
     event.preventDefault();
     // TODO: error state 생성후 작성하기
@@ -52,7 +56,7 @@ const Login = () => {
     try {
       // TODO: 1. 계정 로그인
       const result = await signInWithEmailAndPassword(auth, email, password);
-      console.log("🚀 ~ handleSumbit ~ result:", result);
+      console.log("🚀 ~ handleLogin ~ result:", result);
 
       // TODO: 2. Home화면으로 보내기
       history("/");
@@ -61,6 +65,17 @@ const Login = () => {
       setErrorMessage(error.message);
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const handleSocialLogin = async () => {
+    const provider = new GoogleAuthProvider(); // provider구글 설정
+
+    try {
+      await signInWithPopup(auth, provider); // 팝업에 띄워서 구글 로그인
+      history("/");
+    } catch (error) {
+      console.error(error);
     }
   };
 
@@ -85,7 +100,7 @@ const Login = () => {
         <form
           id="login-form"
           className="text-center flex flex-col gap-2"
-          onSubmit={handleSumbit}
+          onSubmit={handleLogin}
         >
           <InputField
             type="text"
@@ -116,7 +131,11 @@ const Login = () => {
           <span className="bg-churead-black relative z-10 px-2"> or </span>{" "}
         </p>
         {/* START: 소셜 로그인 영역 */}
-        <LoginButton category="socialLogin" text="Continue with Google" />
+        <LoginButton
+          category="socialLogin"
+          text="Continue with Google"
+          onClick={handleSocialLogin}
+        />
         {/* END: 소셜 로그인 영역 */}
       </div>
     </div>
