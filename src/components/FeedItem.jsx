@@ -1,4 +1,6 @@
 import React from "react";
+import { FaTrash } from "react-icons/fa";
+import { RiHeartLine, RiPencilFill } from "react-icons/ri";
 
 const FeedItem = ({ item, currentUserId, onEdit, onLike, onDelete }) => {
   // logic
@@ -22,20 +24,20 @@ const FeedItem = ({ item, currentUserId, onEdit, onLike, onDelete }) => {
             <span className="font-bold">{userName}</span>
             {/* START: 수정, 삭제 버튼 영역 */}
             {isAuthor && (
-              <div className="ml-auto">
+              <div className="ml-auto flex gap-1">
                 <button
                   type="button"
                   className="max-w-6 p-1"
                   onClick={() => onEdit(item)}
                 >
-                  <img src="./images/icon-home.svg" alt="" />
+                  <RiPencilFill size={"18px"} />
                 </button>
                 <button
                   type="button"
                   className="max-w-6 p-1"
                   onClick={() => onDelete(item)}
                 >
-                  <img src="./images/icon-home.svg" alt="" />
+                  <FaTrash size={"14px"} />
                 </button>
               </div>
             )}
@@ -43,14 +45,15 @@ const FeedItem = ({ item, currentUserId, onEdit, onLike, onDelete }) => {
           </div>
           <p className="pt-1">{churead}</p>
           {/* START: 좋아요 영역 */}
-          <div className="flex items-center">
+          <div className="flex items-center gap-1">
             <button
               type="button"
               className="text-churead-gray-400"
               onClick={() => onLike(item)}
             >
-              좋아요 아이콘 <span>{likes}</span>
+              <RiHeartLine />
             </button>
+            <span>{likes}</span>
           </div>
           {/* END: 좋아요 영역 */}
         </div>

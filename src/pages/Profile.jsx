@@ -1,6 +1,7 @@
 import React from "react";
 import { auth } from "../firebase";
 import { useNavigate } from "react-router-dom";
+import Nav from "../components/layout/Nav";
 
 const Profile = () => {
   // logic
@@ -28,6 +29,7 @@ const Profile = () => {
         </button>
       </div>
       {/* END: 로그아웃 버튼 */}
+      <Nav />
     </div>
   );
 };

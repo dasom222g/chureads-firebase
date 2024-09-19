@@ -13,7 +13,7 @@ const Post = () => {
 
   const [churead, setChuread] = useState("");
 
-  const handleSubmit = async (event) => {
+  const handleSave = async (event) => {
     event.preventDefault();
     const chureadValue = churead.trim();
     // 1. 로그인 한 경우만 실행
@@ -35,7 +35,7 @@ const Post = () => {
         likes: 0,
         createAt: Date.now(),
       };
-      console.log("🚀 ~ handleSubmit ~ addData:", addData);
+      console.log("🚀 ~ handleSave ~ addData:", addData);
       await addDoc(collectionRef, addData);
       console.log("포스팅 완료");
       // 포스팅 완료 후 home화면으로 이동
@@ -65,7 +65,7 @@ const Post = () => {
       </header>
       <main className="h-full pt-[72px] pb-[88px] overflow-hidden">
         <div className="h-full overflow-auto">
-          <form id="post" onSubmit={handleSubmit}>
+          <form id="post" onSubmit={handleSave}>
             {/* START: 사용자 입력 영역 */}
             <PostInput onChange={hanldeInputChange} />
             {/* END: 사용자 입력 영역 */}
