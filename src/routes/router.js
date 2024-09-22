@@ -5,6 +5,7 @@ import PrivateRoute from "../pages/PrivateRoute";
 import Home from "../pages/Home";
 import Post from "../pages/Post";
 import Profile from "../pages/Profile";
+import Edit from "../pages/Edit";
 
 export const router = createBrowserRouter([
   {
@@ -18,6 +19,10 @@ export const router = createBrowserRouter([
       {
         path: "/post",
         element: <Post />,
+      },
+      {
+        path: "/edit",
+        element: <Edit />,
       },
       {
         path: "/profile",

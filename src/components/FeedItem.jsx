@@ -15,7 +15,7 @@ const FeedItem = ({ item, currentUserId, onEdit, onLike, onDelete }) => {
       <div className="flex items-start gap-3">
         {/* START: 프로필 이미지 영역 */}
         <div className="w-10 rounded-full overflow-hidden mt-1">
-          <img src="./images/temp/user.png" alt="사용자 프로필 이미지" />
+          <img src={item.userPhotoURL} alt="사용자 프로필 이미지" />
         </div>
         {/* END: 프로필 이미지 영역 */}
         {/* START: 콘텐츠 영역 */}

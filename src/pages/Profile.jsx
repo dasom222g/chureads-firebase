@@ -29,6 +29,7 @@ const Profile = () => {
         </button>
       </div>
       {/* END: 로그아웃 버튼 */}
+      profile
       <Nav />
     </div>
   );

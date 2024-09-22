@@ -2,16 +2,19 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import PostInput from "../components/PostInput";
 import { auth, db } from "../firebase";
-import { addDoc, collection } from "firebase/firestore";
+import { doc, updateDoc } from "firebase/firestore";
 
-const Post = () => {
-  // logic
+const Edit = ({ item }) => {
+  console.log("🚀 ~ Edit ~ item:", item);
   const history = useNavigate("");
+  const { id, userName, churead: itemChuread, userPhotoURL } = item;
+  // logic
   const user = auth.currentUser; // User || null
+  console.log("🚀 ~ Edit ~ user:", user);
 
   const [isLoading, setIsLoading] = useState(""); // 게시중 로딩
 
-  const [churead, setChuread] = useState("");
+  const [churead, setChuread] = useState(itemChuread);
 
   const handleSave = async (event) => {
     event.preventDefault();
@@ -26,20 +29,12 @@ const Post = () => {
 
     setIsLoading(true);
     try {
-      const collectionRef = collection(db, "chureads");
-      // userId, userName, churead, likes, createAt저장
-      const addData = {
-        userId: user.uid,
-        userName: user.displayName,
-        userPhotoURL:
-          user.photoURL ||
-          "https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y",
-        churead: chureadValue,
-        likes: 0,
-        createAt: Date.now(),
-      };
-      await addDoc(collectionRef, addData);
-      console.log("포스팅 완료");
+      const docRef = doc(db, "chureads", id);
+      await updateDoc(docRef, {
+        churead,
+        updateAt: Date.now(),
+      });
+      console.log("수정 완료");
       // 포스팅 완료 후 home화면으로 이동
       history("/");
     } catch (error) {
@@ -70,11 +65,9 @@ const Post = () => {
           <form id="post" onSubmit={handleSave}>
             {/* START: 사용자 입력 영역 */}
             <PostInput
-              userName={user.displayName}
-              userPhotoURL={
-                user.photoURL ||
-                "https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y"
-              }
+              defaultValue={churead || ""}
+              userName={userName}
+              userPhotoURL={userPhotoURL}
               onChange={hanldeInputChange}
             />
             {/* END: 사용자 입력 영역 */}
@@ -87,7 +80,7 @@ const Post = () => {
                 type="submit"
                 className="ml-auto px-5 py-2 bg-white text-churead-black rounded-3xl font-bold"
               >
-                {isLoading ? "Loading" : "게시"}
+                {isLoading ? "Loading" : "수정"}
               </button>
             </div>
             {/* END: 게시 버튼 영역 */}
@@ -98,4 +91,4 @@ const Post = () => {
   );
 };
 
-export default Post;
+export default Edit;

@@ -1,10 +1,52 @@
 import { RouterProvider } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { auth } from "./firebase";
-import { router } from "./routes/router";
+import { createBrowserRouter } from "react-router-dom";
+import Login from "./pages/Login";
+import SignUp from "./pages/SignUp";
+import PrivateRoute from "./pages/PrivateRoute";
+import Home from "./pages/Home";
+import Post from "./pages/Post";
+import Profile from "./pages/Profile";
+import Edit from "./pages/Edit";
 
 function App() {
   // logic
+  const [editItem, setEditItem] = useState(null);
+  const router = createBrowserRouter([
+    {
+      path: "/",
+      element: <PrivateRoute />,
+      children: [
+        {
+          path: "",
+          element: <Home onEdit={(item) => setEditItem(item)} />,
+        },
+        {
+          path: "/post",
+          element: <Post />,
+        },
+        {
+          path: "/edit",
+          element: <Edit item={editItem} />,
+        },
+        {
+          path: "/profile",
+          element: <Profile />,
+        },
+      ],
+    },
+    // 각 객체 하나가 페이지 하나
+    {
+      path: "/login",
+      element: <Login />,
+    },
+    {
+      path: "/sign-up",
+      element: <SignUp />,
+    },
+  ]);
+
   const [isLoading, setIsLoading] = useState(true); // 진입시 무조건 로딩
 
   const init = async () => {

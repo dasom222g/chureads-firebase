@@ -16,7 +16,7 @@ import {
   updateDoc,
 } from "firebase/firestore";
 
-const Home = () => {
+const Home = ({ onEdit }) => {
   // logic
   const history = useNavigate();
   const user = auth.currentUser;
@@ -76,7 +76,10 @@ const Home = () => {
   };
 
   const handleEdit = (selectedItem) => {
-    console.log("🚀 selectedItem:", selectedItem);
+    // 글 작성자 한번 더 체크
+    if (user.uid !== selectedItem.userId) return;
+    onEdit(selectedItem);
+    history("/edit");
   };
 
   const handleLike = async (selectedItem) => {
@@ -113,7 +116,6 @@ const Home = () => {
 
     return () => {
       // 실시간 데이터 snapshot이벤트/ 구독취소
-      console.log("unsubscribe", unsubscribe);
       unsubscribe && unsubscribe();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
