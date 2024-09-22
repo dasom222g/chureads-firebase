@@ -21,3 +21,6 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# firebase 비공개 키
+chureads-firebase-adminsdk-accf0-2935d545ff.json
