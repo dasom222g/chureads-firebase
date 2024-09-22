@@ -5,12 +5,10 @@ import { auth, db } from "../firebase";
 import { doc, updateDoc } from "firebase/firestore";
 
 const Edit = ({ item }) => {
-  console.log("🚀 ~ Edit ~ item:", item);
   const history = useNavigate("");
   const { id, userName, churead: itemChuread, userPhotoURL } = item;
   // logic
   const user = auth.currentUser; // User || null
-  console.log("🚀 ~ Edit ~ user:", user);
 
   const [isLoading, setIsLoading] = useState(""); // 게시중 로딩
 
@@ -25,7 +23,6 @@ const Edit = ({ item }) => {
     // 4. 포스팅 로딩중이 아닌 경우만 실행(isLoading추가 후에 작성)
     if (isLoading || !user || !chureadValue || chureadValue.length > 500)
       return;
-    console.log("chureadValue", chureadValue);
 
     setIsLoading(true);
     try {
